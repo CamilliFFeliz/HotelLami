@@ -1,0 +1,14 @@
+C:\Users\mimif\Downloads\Trabalho\HotelLami\bin\Debug\net9.0\HotelLami.exe
+C:\Users\mimif\Downloads\Trabalho\HotelLami\bin\Debug\net9.0\HotelLami.deps.json
+C:\Users\mimif\Downloads\Trabalho\HotelLami\bin\Debug\net9.0\HotelLami.runtimeconfig.json
+C:\Users\mimif\Downloads\Trabalho\HotelLami\bin\Debug\net9.0\HotelLami.dll
+C:\Users\mimif\Downloads\Trabalho\HotelLami\bin\Debug\net9.0\HotelLami.pdb
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.AssemblyInfoInputs.cache
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.AssemblyInfo.cs
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.csproj.CoreCompileInputs.cache
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.dll
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\refint\HotelLami.dll
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.pdb
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\HotelLami.genruntimeconfig.cache
+C:\Users\mimif\Downloads\Trabalho\HotelLami\obj\Debug\net9.0\ref\HotelLami.dll
