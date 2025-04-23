@@ -56,7 +56,7 @@ namespace HotelLami.Models
                         {
                             Quarto = quarto;
                             quarto.Disponivel = false;
-                            Console.WriteLine("✅ Quarto reservado com sucesso!");
+                            Console.WriteLine("Quarto reservado com sucesso!");
                             valido = true;
                             break;
                         }
@@ -64,12 +64,12 @@ namespace HotelLami.Models
 
                     if (!valido)
                     {
-                        Console.WriteLine("❌ Quarto não encontrado ou indisponível. Tente novamente.");
+                        Console.WriteLine("Quarto não encontrado ou indisponível. Tente novamente.");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("❌ Entrada inválida. Digite um número válido.");
+                    Console.WriteLine("Entrada inválida. Digite um número válido.");
                 }
 
             } while (!valido);
