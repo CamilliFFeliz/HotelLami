@@ -1,38 +1,37 @@
+using System.Text.Json;
 using HotelLami.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddOpenApi();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-}   
+}
 
-var clientes = new List<Cliente>
+string caminhoClientes = "clientes.json";
+string caminhoHoteis = "hoteis.json";
+string caminhoReservas = "reservas.json";
+
+List<Cliente> clientes = File.Exists(caminhoClientes)
+    ? JsonSerializer.Deserialize<List<Cliente>>(File.ReadAllText(caminhoClientes)) ?? new List<Cliente>()
+    : new List<Cliente>();
+
+List<Hotel> hoteis = File.Exists(caminhoHoteis)
+    ? JsonSerializer.Deserialize<List<Hotel>>(File.ReadAllText(caminhoHoteis)) ?? new List<Hotel>()
+    : new List<Hotel>();
+
+List<Reserva> reservas = File.Exists(caminhoReservas)
+    ? JsonSerializer.Deserialize<List<Reserva>>(File.ReadAllText(caminhoReservas)) ?? new List<Reserva>()
+    : new List<Reserva>();
+
+void SalvarDados()
 {
-    new Cliente { Nome = "Camilli Frigeri Feliz", Cpf = "111.222.333-44", Idade = 21 },
-    new Cliente { Nome = "Alana Cristina Martens", Cpf = "444.333.222-11", Idade = 18 }
-};
-
-var hotel1 = new Hotel("Hotel Transilvania", "12.345.678/0001-99", "Rua Imaginária, 111")
-{
-    QuantQuartos = 5,
-    Quartos = new List<Quarto>
-    {
-        new Quarto { Numero = 1, Tipo = "Solteiro", Disponivel = true, PrecoDiaria = 95.00m },
-        new Quarto { Numero = 2, Tipo = "Simples", Disponivel = true, PrecoDiaria = 150.00m },
-        new Quarto { Numero = 3, Tipo = "Simples", Disponivel = true, PrecoDiaria = 150.00m },
-        new Quarto { Numero = 4, Tipo = "Suíte", Disponivel = true, PrecoDiaria = 250.00m },
-        new Quarto { Numero = 5, Tipo = "Suíte", Disponivel = true, PrecoDiaria = 250.00m }
-    }
-};
-
-var hoteis = new List<Hotel> { hotel1 };
-var reservas = new List<Reserva>();
-
+    File.WriteAllText(caminhoClientes, JsonSerializer.Serialize(clientes, new JsonSerializerOptions { WriteIndented = true }));
+    File.WriteAllText(caminhoHoteis, JsonSerializer.Serialize(hoteis, new JsonSerializerOptions { WriteIndented = true }));
+    File.WriteAllText(caminhoReservas, JsonSerializer.Serialize(reservas, new JsonSerializerOptions { WriteIndented = true }));
+}
 
 app.MapGet("/clientes", () => Results.Ok(clientes));
 
@@ -45,6 +44,7 @@ app.MapGet("/clientes/{cpf}", (string cpf) =>
 app.MapPost("/clientes", (Cliente c) =>
 {
     clientes.Add(c);
+    SalvarDados();
     return Results.Created($"/clientes/{c.Cpf}", c);
 });
 
@@ -55,7 +55,7 @@ app.MapPut("/clientes/{cpf}", (string cpf, Cliente c) =>
 
     clienteExistente.Nome = c.Nome;
     clienteExistente.Idade = c.Idade;
-
+    SalvarDados();
     return Results.Ok(clienteExistente);
 });
 
@@ -65,9 +65,9 @@ app.MapDelete("/clientes/{cpf}", (string cpf) =>
     if (cliente == null) return Results.NotFound("Cliente não encontrado.");
 
     clientes.Remove(cliente);
+    SalvarDados();
     return Results.NoContent();
 });
-
 
 app.MapGet("/hoteis", () => Results.Ok(hoteis));
 
@@ -80,6 +80,7 @@ app.MapGet("/hoteis/{cnpj}", (string cnpj) =>
 app.MapPost("/hoteis", (Hotel h) =>
 {
     hoteis.Add(h);
+    SalvarDados();
     return Results.Created($"/hoteis/{h.Cnpj}", h);
 });
 
@@ -91,7 +92,8 @@ app.MapPut("/hoteis/{cnpj}", (string cnpj, Hotel h) =>
     hotelExistente.Nome = h.Nome;
     hotelExistente.Endereco = h.Endereco;
     hotelExistente.QuantQuartos = h.QuantQuartos;
-
+    hotelExistente.Quartos = h.Quartos;
+    SalvarDados();
     return Results.Ok(hotelExistente);
 });
 
@@ -101,6 +103,7 @@ app.MapDelete("/hoteis/{cnpj}", (string cnpj) =>
     if (hotel == null) return Results.NotFound("Hotel não encontrado.");
 
     hoteis.Remove(hotel);
+    SalvarDados();
     return Results.NoContent();
 });
 
@@ -126,10 +129,11 @@ app.MapPost("/reservas", (Reserva r) =>
     r.Id = reservas.Count > 0 ? reservas.Max(x => x.Id) + 1 : 1;
     r.Cliente = cliente;
     r.Hotel = hotel;
-    r.Quarto = quartoDisponivel; 
+    r.Quarto = quartoDisponivel;
     quartoDisponivel.Disponivel = false;
 
     reservas.Add(r);
+    SalvarDados();
     return Results.Created($"/reservas/{r.Id}", r);
 });
 
@@ -141,7 +145,7 @@ app.MapPut("/reservas/{id}", (int id, Reserva r) =>
     reservaExistente.Cliente = r.Cliente;
     reservaExistente.Hotel = r.Hotel;
     reservaExistente.Quarto = r.Quarto;
-
+    SalvarDados();
     return Results.Ok(reservaExistente);
 });
 
@@ -154,33 +158,8 @@ app.MapDelete("/reservas/{id}", (int id) =>
     if (quarto != null) quarto.Disponivel = true;
 
     reservas.Remove(reserva);
+    SalvarDados();
     return Results.NoContent();
 });
-
-
-var clienteAlana = clientes.FirstOrDefault(c => c.Cpf == "444.333.222-11");
-var hotelTransilvania = hoteis.FirstOrDefault(h => h.Nome == "Hotel Transilvania");
-var quartoEscolhido = hotelTransilvania?.Quartos.FirstOrDefault(q => q.Numero == 2 && q.Disponivel);
-
-if (clienteAlana != null && hotelTransilvania != null && quartoEscolhido != null)
-{
-    var novaReserva = new Reserva
-    {
-        Id = reservas.Count > 0 ? reservas.Max(r => r.Id) + 1 : 1,
-        Cliente = clienteAlana,
-        Hotel = hotelTransilvania,
-        Quarto = quartoEscolhido,
-        DataCheckIn = new DateTime(2025, 6, 1),
-        DataCheckOut = new DateTime(2025, 6, 5)
-    };
-
-    quartoEscolhido.Disponivel = false;
-    reservas.Add(novaReserva);
-    novaReserva.ExibirReserva();
-}
-else
-{
-    Console.WriteLine("Erro ao criar reserva: cliente, hotel ou quarto não encontrado.");
-}
 
 app.Run();
