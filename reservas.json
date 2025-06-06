@@ -1,1 +1,25 @@
-[]
+[
+  {
+    "Id": 1,
+    "Cliente": {
+      "Nome": null,
+      "Cpf": "22233344455",
+      "Idade": 0
+    },
+    "Hotel": {
+      "Nome": "Hotel Lami",
+      "Cnpj": null,
+      "Endereco": null,
+      "QuantQuartos": 0,
+      "Quartos": []
+    },
+    "Quarto": {
+      "Numero": 101,
+      "Tipo": null,
+      "Disponivel": false,
+      "PrecoDiaria": 0
+    },
+    "DataCheckIn": "0001-01-01T00:00:00",
+    "DataCheckOut": "0001-01-01T00:00:00"
+  }
+]

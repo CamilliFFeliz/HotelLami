@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "Nome": "Hotel Lami",
+    "Cnpj": "12345678000100",
+    "Endereco": "Rua das Palmeiras, 123",
+    "QuantQuartos": 2,
+    "Quartos": [
+      {
+        "Numero": 101,
+        "Tipo": "Solteiro",
+        "Disponivel": false,
+        "PrecoDiaria": 0
+      },
+      {
+        "Numero": 102,
+        "Tipo": "Casal",
+        "Disponivel": true,
+        "PrecoDiaria": 0
+      }
+    ]
+  }
+]
